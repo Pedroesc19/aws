@@ -1,6 +1,10 @@
+########################
+#  EC2 Web Application #
+########################
+
 data "aws_ami" "ubuntu" {
   most_recent = true
-  owners      = ["099720109477"]
+  owners      = ["099720109477"] # Canonical
 
   filter {
     name   = "name"
@@ -9,11 +13,12 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_instance" "web" {
-  ami                    = data.aws_ami.ubuntu.id
-  instance_type          = "t3.micro"
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t3.micro"
+
   subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.public_sg.id]
-  key_name               = var.key_name
+  key_name               = aws_key_pair.user1.key_name
 
   user_data = templatefile("${path.module}/userdata.sh", {
     db_host     = aws_db_instance.mysql.address
@@ -22,7 +27,5 @@ resource "aws_instance" "web" {
     repo_url    = var.repo_url
   })
 
-  tags = {
-    Name = "web-server"
-  }
+  tags = { Name = "web-server" }
 }
