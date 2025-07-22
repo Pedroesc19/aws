@@ -17,13 +17,14 @@ variable "public_key_path" {
 }
 # Nombre global-único para el bucket
 variable "app_bucket_name" {
+  description = "Nombre opcional del bucket S3 que alojará app.zip; si se deja vacío, se generará uno"
   type        = string
-  description = "Bucket S3 que aloja el paquete ZIP de la app"
-  default     = "store-app-code-bucket-${random_id.suffix.hex}"
+  default     = ""          # ← sin interpolaciones
 }
 
 # Key (nombre) del objeto ZIP dentro del bucket
 variable "app_zip_key" {
+  description = "Nombre del objeto ZIP en el bucket"
   type        = string
   default     = "app-v1.zip"
 }
