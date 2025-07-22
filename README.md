@@ -13,8 +13,8 @@ La aplicación web permite ver, agregar, eliminar y actualizar productos almacen
 
 ## Uso
 
-1. Configure las variables necesarias en `terraform/variables.tf` (usuario, contraseña de la base de datos y `key_name`).
-2. Ejecute `terraform init` y `terraform apply` dentro de la carpeta `terraform` para crear la infraestructura.
+1. Configure las variables necesarias en `terraform-code/variables.tf` (usuario, contraseña de la base de datos y `key_name`). Coloque su clave pública SSH en `terraform-code/user1keypair.pub` o ajuste la variable `public_key_path` para apuntar a la ubicación correcta.
+2. Ejecute `terraform init` y `terraform apply` dentro de la carpeta `terraform-code` para crear la infraestructura.
 3. La instancia EC2 ejecutará la aplicación Flask automáticamente mediante el script de `userdata`.
 4. Utilice los workflows de GitHub Actions para automatizar la creación y destrucción de la infraestructura (`terraform_apply.yml` y `terraform_destroy.yml`) y para desplegar actualizaciones de la aplicación (`app_deploy.yml`).
 

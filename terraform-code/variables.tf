@@ -13,7 +13,7 @@ variable "private_subnet_b_cidr" {
 variable "public_key_path" {
   description = "Path al archivo de clave pública RSA que se cargará como Key Pair en AWS"
   type        = string
-  default     = "C:/Users/Lenovo/.ssh/user1keypair.pub"
+  default     = "${path.module}/user1keypair.pub"
 }
 # Nombre global-único para el bucket
 variable "app_bucket_name" {
