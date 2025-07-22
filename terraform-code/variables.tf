@@ -33,3 +33,9 @@ variable "app_zip_key" {
 resource "random_id" "suffix" {
   byte_length = 4
 }
+
+variable "key_name" {
+  description = "EC2 key pair"
+  type        = string
+  default     = "user1keypair"
+}
