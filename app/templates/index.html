@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+  <title>Inventory</title>
+</head>
+<body>
+  <h1>Inventory</h1>
+  <ul>
+    {% for p in products %}
+    <li>{{p.id}} {{p.name}} - {{p.quantity}}
+      <form action="/delete/{{p.id}}" method="get" style="display:inline">
+        <button>Delete</button>
+      </form>
+      <form action="/update/{{p.id}}" method="post" style="display:inline">
+        <input type="number" name="quantity" value="{{p.quantity}}">
+        <button>Update</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+
+  <h2>Add product</h2>
+  <form action="/add" method="post">
+    <input type="text" name="name" placeholder="Name">
+    <input type="number" name="quantity" placeholder="Quantity">
+    <button>Add</button>
+  </form>
+</body>
+</html>
