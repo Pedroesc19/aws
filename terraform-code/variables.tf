@@ -15,3 +15,20 @@ variable "public_key_path" {
   type        = string
   default     = "C:/Users/Lenovo/.ssh/user1keypair.pub"
 }
+# Nombre global-único para el bucket
+variable "app_bucket_name" {
+  type        = string
+  description = "Bucket S3 que aloja el paquete ZIP de la app"
+  default     = "store-app-code-bucket-${random_id.suffix.hex}"
+}
+
+# Key (nombre) del objeto ZIP dentro del bucket
+variable "app_zip_key" {
+  type        = string
+  default     = "app-v1.zip"
+}
+
+# Genera sufijo aleatorio para evitar choques de nombre
+resource "random_id" "suffix" {
+  byte_length = 4
+}

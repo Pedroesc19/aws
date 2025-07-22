@@ -1,0 +1,51 @@
+name: Deploy Application
+
+on:
+  push:
+    paths:
+      - "app/**"
+      - "init.sql"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: us-east-1
+      BUCKET: ${{ secrets.APP_BUCKET_NAME }} # debe coincidir con el output `app_bucket_name`
+      ZIP_KEY: app-v1.zip
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Build app.zip
+        run: |
+          cd terraform-code
+          zip -r app.zip ../app init.sql
+
+      - name: Upload to S3
+        run: aws s3 cp terraform-code/app.zip s3://$BUCKET/$ZIP_KEY
+
+      - name: Invoke EC2 to pull new code (via SSM)
+        uses: aws-actions/aws-ssm@v1
+        with:
+          region: ${{ env.AWS_REGION }}
+          document-name: AWS-RunShellScript
+          instance-ids: ${{ secrets.EC2_INSTANCE_ID }}
+          parameters: |
+            commands=[
+              "cd /home/ubuntu",
+              "aws s3 cp s3://$BUCKET/$ZIP_KEY app.zip",
+              "unzip -o app.zip",
+              "cd app",
+              "pkill -f app.py || true",
+              "nohup python3 app.py --host=0.0.0.0 --port=80 &"
+            ]

@@ -21,6 +21,7 @@ resource "aws_instance" "web" {
   key_name               = aws_key_pair.user1.key_name
 
   user_data = templatefile("${path.module}/userdata.sh", {
+    bucket  = var.app_bucket_name
     db_host     = aws_db_instance.mysql.address
     db_user     = var.db_username
     db_password = var.db_password
