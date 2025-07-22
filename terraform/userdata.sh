@@ -10,4 +10,8 @@ fi
 cd "$REPO_NAME"
 pip3 install -r app/requirements.txt
 mysql -h ${db_host} -u ${db_user} -p${db_password} < terraform/init.sql
+export DB_HOST=${db_host}
+export DB_USER=${db_user}
+export DB_PASSWORD=${db_password}
+export DB_NAME=store  # opcional
 nohup python3 app/app.py &
