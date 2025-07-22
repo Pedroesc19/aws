@@ -1,0 +1,10 @@
+# Ignorar artefactos generados por terraform init
+.terraform/
+terraform.tfstate
+terraform.tfstate.*
+*.tfplan
+
+# Otros
+*.zip
+*.pem
+*.exe
