@@ -13,13 +13,13 @@ variable "private_subnet_b_cidr" {
 variable "public_key_path" {
   description = "Path al archivo de clave pública RSA que se cargará como Key Pair en AWS"
   type        = string
-  default     = "${path.module}/user1keypair.pub"
+  default     = "user1keypair.pub"
 }
 # Nombre global-único para el bucket
 variable "app_bucket_name" {
   description = "Nombre opcional del bucket S3 que alojará app.zip; si se deja vacío, se generará uno"
   type        = string
-  default     = ""          # ← sin interpolaciones
+  default     = "" # ← sin interpolaciones
 }
 
 # Key (nombre) del objeto ZIP dentro del bucket
