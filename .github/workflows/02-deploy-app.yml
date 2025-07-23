@@ -35,17 +35,9 @@ jobs:
         run: aws s3 cp terraform-code/app.zip s3://$BUCKET/$ZIP_KEY
 
       - name: Invoke EC2 to pull new code (via SSM)
-        uses: aws-actions/aws-ssm@v1
-        with:
-          region: ${{ env.AWS_REGION }}
-          document-name: AWS-RunShellScript
-          instance-ids: ${{ secrets.EC2_INSTANCE_ID }}
-          parameters: |
-            commands=[
-              "cd /home/ubuntu",
-              "aws s3 cp s3://$BUCKET/$ZIP_KEY app.zip",
-              "unzip -o app.zip",
-              "cd app",
-              "pkill -f app.py || true",
-              "nohup python3 app.py --host=0.0.0.0 --port=80 &"
-            ]
+        run: |
+          aws ssm send-command \
+            --document-name "AWS-RunShellScript" \
+            --instance-ids ${{ secrets.EC2_INSTANCE_ID }} \
+            --region $AWS_REGION \
+            --parameters "commands=[\"cd /home/ubuntu\",\"aws s3 cp s3://$BUCKET/$ZIP_KEY app.zip\",\"unzip -o app.zip\",\"cd app\",\"pkill -f app.py || true\",\"nohup python3 app.py --host=0.0.0.0 --port=80 &\"]"
